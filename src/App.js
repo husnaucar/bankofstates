@@ -13,6 +13,7 @@ function App() {
          <Route path="/register">Register</Route>
          <Route path="/" component={Home}></Route>
         </Switch>
+       
      </div>
     </Router>
   );
