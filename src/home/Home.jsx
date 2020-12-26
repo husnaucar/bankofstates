@@ -2,6 +2,7 @@ import React from 'react';
 import Banner from "./Banner";
 import About from "../about/About";
 import Product from "../product/Product";
+import Price from "../price/Price";
 import silver from "../images/card/silver.jpg";
 import gold from "../images/card/gold.jpg";
 import platinum from "../images/card/platinum.jpg";
@@ -35,6 +36,7 @@ function Home() {
             image={platinum}
             />
             </div>
+            <Price />
         </div>
     )
 }
