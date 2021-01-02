@@ -17,14 +17,112 @@ const RegisterSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Required"),
   });
 
+  const RegistrationForm = (props) => (
+    <div className="container">
+      <fieldset>
+        <legend>Register</legend>
+        <Form>
+        <div className="row justify-content-start">
+          <div className="col-lg-2 text-center p-3">
+            <Field
+                component={TextField}
+                name="firstName"
+                type="text"
+                label="First Name"
+              />
+          </div>
+          <div className="col-lg-2 text-center p-3">
+            <Field
+              component={TextField}
+              name="lastName"
+              type="text"
+              label="Last Name"
+            />
+            </div>
+        </div>
+        <div className="row justify-content-start">
+          <div className="col-lg-2 p-3">
+            <Field
+                component={TextField}
+                name="dob"
+                type="date"
+                label="Date Of Birth"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+          </div>
+          <div className="col-lg-2 p-3">
+            <Field
+              component={TextField}
+              name="email"
+              type="email"
+              label="Email"
+            />
+          </div>
+        </div>
+        <div className="row justify-content-start">
+          <div className="col-lg-2 p-3">
+            <Field
+              component={TextField}
+              type="password"
+              label="Password"
+              name="password"
+            />
+        
+          </div>
+          <div className="col-lg-2 p-3">
+            <Field
+              component={TextField}
+              type="password"
+              label="Confirm Password"
+              name="confirmPassword"
+            />
+            {props.isSubmitting && <LinearProgress />}
+          </div>
+        </div>
+        <div className="row justify-content-start">
+          <div className="col-lg-4 text-center p-3">
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={props.isSubmitting}
+              onClick={props.submitForm}
+              className="register__btn"
+            >
+              Submit
+            </Button>
+          </div>
+        </div>        
+        </Form>
+      </fieldset>
+      </div>
+  );
   
   const Register = () => {
-      return (
-          <div>
-              
-          </div>
-      )
-  }
+    return (
+      <Formik
+        initialValues={{
+          firstName: "",
+          lastName: "",
+          dob: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        }}
+        validationSchema={RegisterSchema}
+        component={RegistrationForm}
+        onSubmit={(values, actions) => {
+          setTimeout(() => {
+            actions.setSubmitting(false);
+            alert(JSON.stringify(values));
+          }, 500);
+          actions.resetForm();
+        }}
+        
+      ></Formik>
+    );
+  };
   
   export default Register;
   
