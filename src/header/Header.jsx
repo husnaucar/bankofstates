@@ -2,10 +2,18 @@ import React from 'react' /*rfce*/
 import logo from "../images/logo.png";
 import SearchIcon from "@material-ui/icons/Search";
 import ShoppingCart from "@material-ui/icons/ShoppingCart";
+import ExitToApp from "@material-ui/icons/ExitToApp";
 import { Link } from "react-router-dom";
 import "./Header.css"
+import { useStateValue } from "../StateProvider";
+import AdminMenu from "../menus/AdminMenu";
+import UserMenu from "../menus/UserMenu";
+import { useHistory } from "react-router";
 
 function Header() {
+  const [{ cart, userInfo }, dispatch] = useStateValue();
+  const history = useHistory();
+  
     return (
         <nav className= "header">
         {/* {logo} */}
@@ -19,7 +27,8 @@ function Header() {
         <input type="text" className="header__searchInput" />
         <SearchIcon className="header__searchIcon" />
         </div>
-        <div className="header__nav">
+       {!userInfo && (
+          <div className="header__nav">
             <Link to="/login" className="header__link">
              <div className="header__option">
                 <span className="header__lineOne">Hello</span>
@@ -37,8 +46,29 @@ function Header() {
             <ShoppingCart />
           </div>
         </Link>
-        </div>
 
+        </div>
+        )}
+        {userInfo && userInfo.user && userInfo.user.isAdmin && <AdminMenu />}
+        {userInfo && userInfo.user && !userInfo.user.isAdmin && <UserMenu />}
+        {userInfo && userInfo.user && (
+          <div className="header__nav header__link">
+            <div className="header__option">
+              <span className="header__lineOne">Welcome</span>
+              <span className="header__lineTwo">
+                {userInfo.user.firstName} {userInfo.user.lastName}
+              </span>
+            </div>
+            <Link to="/" className="header__link">
+              <div className="header__option">
+                <span className="header__lineOne">
+                  <ExitToApp />
+                </span>
+                <span className="header__lineOne">Logout</span>
+              </div>
+            </Link>
+          </div>
+        )}
         </nav>
     )
 }
