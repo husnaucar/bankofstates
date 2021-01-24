@@ -1,3 +1,4 @@
+import { AspectRatioTwoTone } from "@material-ui/icons";
 import Login from "./login/Login";
 
 export const initialState = {
@@ -8,6 +9,10 @@ export const initialState = {
   const reducer = (state, action) => {
     switch (action.type) {
       case "LOGIN":
+        return {
+          ...state, userInfo : action.item
+        };
+      case "LOGOUT":
         return {
           ...state, userInfo : action.item
         };
