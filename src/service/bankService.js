@@ -18,5 +18,8 @@ class BankService{
     addRecipient(recipientInfo) {
         return axiosInstance.post(BASE_URL + "/account/addRecipient",recipientInfo);
       }
+    transfer(transerInfo) {
+        return axiosInstance.post(BASE_URL + "/account/transfer", transerInfo); 
+      }
 }
 export default new BankService() ;

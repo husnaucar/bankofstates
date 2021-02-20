@@ -102,13 +102,19 @@ const Transfer = () => {
                 service.transfer(values).then((response) => {
                   if (response.status === 200) {
                     const userInfo = response.data;
-                    dispatch({
+                    if(userInfo.success){  dispatch({
                       type: "UPDATE",
                       item: userInfo,
                     });
                     toast.success(userInfo.message, {
                       position: toast.POSITION.TOP_CENTER,
+                    });}
+                    else {
+                        toast.error(userInfo.message, {
+                      position: toast.POSITION.TOP_CENTER,
                     });
+                    }
+                  
                     actions.resetForm();
                   }
                 });

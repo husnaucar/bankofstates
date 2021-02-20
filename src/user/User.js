@@ -26,22 +26,20 @@ const useStyles = makeStyles(styles);
 
 
 
-const transferData = [
-  {
-    type: "funnel",
-    x: [3500, 3000, 2800, 2500, 2000, 1000, 500],
-    y: ["5/Jan", "8/Jan", "2/Jan", "1/Jan", "7/Jan", "3/Jan", "10/Jan"],
-    hoverinfo: "percent total+x",
-  },
-];
+
 const User = () => {
   const classes = useStyles();
   const [{ userInfo }] = useStateValue();
   const history = useHistory();
   const transactions = userInfo.user.transactions;
   const uniqDates = _.uniq(_.map(transactions,"date")).sort();
+  let totalRecipients = 0;
+  if (userInfo?.user?.recipients?.length > 0) {
+    totalRecipients = userInfo.user.recipients.length;
+  }
   const depositArray = [];
   const withdrawalArray = [];
+  const transferArray = [];
   uniqDates.forEach(function(key){
     const deposits = _.filter(transactions,function(transaction){
       return transaction.type === "DEPOSIT" && transaction.date ===key;
@@ -51,17 +49,31 @@ const User = () => {
       return transaction.type === "WITHDRAW" && transaction.date ===key;
     });
 
+    const transfers= _.filter(transactions,function(transaction){
+      return transaction.type === "TRANSFER" && transaction.date ===key;
+    });
+
     const depositAmounts = _.map(deposits,"amount");
     const withdrawAmounts = _.map(withdraws,"amount");
+    const transferAmounts = _.map(transfers,"amount");
+
     const sumOfDeposits = _.sum(depositAmounts);
     const sumOfWithdraws = _.sum(withdrawAmounts);
+    const sumOfTransfers = _.sum(transferAmounts);
+
     depositArray.push(sumOfDeposits);
     withdrawalArray.push(sumOfWithdraws);
+    const transferObject = {
+        date : key.substring(0,5),
+        amount : sumOfTransfers,
+    }
+    transferArray.push(transferObject);
 
   });
 
   const totalDeposit = _.sum(depositArray);
   const totalWithdrawal = _.sum(withdrawalArray);
+  const orderedTransferArray = _.orderBy(transferArray, ["amount"]).reverse();
   const depositData = [
     {
       type: "bar",
@@ -74,6 +86,14 @@ const User = () => {
       type: "scatter",
       x: uniqDates,
       y: withdrawalArray,
+    },
+  ];
+  const transferData = [
+    {
+      type: "funnel",
+      x: _.map(orderedTransferArray, "amount"),
+      y: _.map(orderedTransferArray, "date"),
+      hoverinfo: "percent total+x",
     },
   ];
   return (
@@ -142,7 +162,7 @@ const User = () => {
                     <Accessibility />
                   </CardIcon>
                   <p className={classes.cardCategory}>Recipients</p>
-                  <h3 className={classes.cardTitle}>5</h3>
+                  <h3 className={classes.cardTitle}>{totalRecipients}</h3>
                 </CardHeader>
                 <CardFooter stats>
                   <div className={classes.stats}>
