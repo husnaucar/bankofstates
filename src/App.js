@@ -11,6 +11,7 @@ import Withdraw from "./withdraw/Withdraw";
 import AddRecipient from "./transfer/AddRecipient";
 import Transfer from "./transfer/Transfer";
 import Admin from "./admin/Admin";
+import UserMgmt from "./admin/UserMgmt";
 import User from "./user/User";
 import './App.css';
 
@@ -26,6 +27,7 @@ function App() {
         <Route path= "/deposit"><Deposit /></Route>
           <Route path= "/user"><User /></Route>
           <Route path= "/admin"><Admin /></Route>
+          <Route path= "/userMgmt"><UserMgmt /></Route>
          <Route path="/login"><Login /></Route>
          <Route path="/register"><Register /></Route>
          <Route path="/logout"><Logout /></Route>
